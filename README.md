@@ -104,8 +104,48 @@ tiara -i $CONTIGS -o out.txt -v --tf all -t 12
 
 
 ## Kaiju
-
+Install kaiju
+```
+git clone https://github.com/bioinformatics-centre/kaiju.git
+cd kaiju/src
+make
 ```
 
+Set up database using large memory node
+```
+#!/bin/bash
+
+#SBATCH --time=20:00:00
+##SBATCH --account=epscor-condo
+#SBATCH --partition=bigmem
+#SBATCH -N 1 # Single Node
+#SBATCH -n 2 # Two cores 
+#SBATCH --mem-per-cpu=300G
+##SBATCH --threads-per-core=2
+#SBATCH -J set_up_nr_db_kaiju
+
+#----- End of slurm commands ----
+KAIJU_DIR=/users/ibishop/scratch/kaiju/kaiju/bin
+
+$KAIJU_DIR/kaiju-makedb -s nr_euk
+```
+
+Run Kaiju classification
+```
+#!/bin/bash
+
+#SBATCH --time=1:00:00
+#SBATCH --mem=144G #default is 1 core with 2.8GB of memory
+#SBATCH -n 12
+#SBATCH --account=epscor-condo
+
+#SBATCH -J kaiju_nr_classify
+
+#----- End of slurm commands ----
+
+KAIJU_DIR=~/scratch/kaiju/kaiju
+CCS_READS=~/data/ccs.fastq.gz
+
+kaiju -t $KAIJU_DIR/nodes.dmp -f $KAIJU_DIR/kaiju-nreukdb/nr_euk/kaiju_db_nr_euk.fmi -i $CCS_READS -o raw_ccs.out -z 12
 ```
 
