@@ -4,6 +4,14 @@ walkthrough multiple options for classifying pacbio ccs reads
 ## kraken2
 both building the databases and running the classification can use a lot of memory, which is why i'm using large memory nodes
 
+Install kraken2
+```
+git clone https://github.com/DerrickWood/kraken2.git
+cd kraken2
+./install_kraken2.sh
+```
+
+Download and build database
 ```
 #!/bin/bash
 
