@@ -65,17 +65,43 @@ module load blast/2.7.1+
 kraken2 --threads 2 --report nr_classify_ccs_raw_report --use-names --output nr_classify_ccs_raw --db $DBNAME $CCS_READS
 ```
 
+
 ## tiara
 
+Set up new conda environment and install tiara and dependencies
+```
+module load anaconda/2020.02
+conda create --name tiara python=3.8
+source activate tiara
+conda install numpy pytorch numba joblib
+conda install -c conda-forge tqdm biopython skorch
 ```
 
+Run tiara classification
 ```
+#!/bin/bash
+
+#SBATCH --time=1:00:00
+#SBATCH --mem=48G #default is 1 core with 2.8GB of memory
+#SBATCH -n 12
+#SBATCH --account=epscor-condo
+#SBATCH -J tiara_classify
+
+module load anaconda/2020.02
+source activate tiara
+
+CONTIGS=~/scratch/ipa_haplotigs_diamond/final_haplotigs.fa
+
+tiara -i $CONTIGS -o out.txt -v --tf all -t 12
+```
+
 
 ## DIAMOND blastx
 
 ```
 
 ```
+
 
 ## Kaiju
 
